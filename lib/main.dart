@@ -1,5 +1,14 @@
+import 'dart:convert';
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/services.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import 'model/deal.dart';
+import 'model/deal.dart';
+import 'model/deal.dart';
 
 void main() {
   runApp(MyApp());
@@ -46,11 +55,24 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+Future<List<Deal>> getDeals() async {
+  final responce =
+  await rootBundle.loadString("lib/assets/deals.json");
+  final data = await json.decode(responce) as List<dynamic>;
+
+  return data
+      .map((e) => Deal.fromJson(e))
+      .toList();
+
+}
+
 class _MyHomePageState extends State<MyHomePage> {
 
   int _counter = 0;
   int column_counter =4;
   int hour_heigh = 60;
+  //var deals = [Deal( time_start: 60, color: "Colors.amber", id: 1, name: 'name1', description: 'description', time_finish: 120 ),Deal( time_start: 120, color: "Colors.amber", id: 1, name: 'name2', description: 'description', time_finish: 180 ),Deal( time_start: 380, color: "Colors.amber", id: 1, name: 'name', description: 'description', time_finish: 570 ),Deal( time_start: 1000, color: "Colors.amber", id: 1, name: 'name', description: 'description', time_finish: 1200 )];
+  //var deals = getDeals();
 
   late CalendarController _calendar;
   TextStyle dayStyle(FontWeight fontWeight){
@@ -171,81 +193,66 @@ class _MyHomePageState extends State<MyHomePage> {
                     blurRadius: 10.0,
                   )]
                 ),
-                child: Row(
-                  children: [
-                    Column(
-                        children: [
-                          for(int j=0;j<24;j++)
-                            Container(
-                              color: Color(0xff3AF0E5),
-                              height: hour_heigh*1,
-                              width: 40,
-                              margin: EdgeInsets.only(right: 2),
-                              child: Text(intToTime(j)),
-                            )
-                        ]
-                    ),
-                    for(int i=0; i<4;i++)
-                      Expanded(
-                          child: Column(
+                child:    FutureBuilder<List<Deal>>(
+                    future: getDeals(),
+                    builder: (context, data) {
+                      if (data.hasError) {
+                        return Center(child: Text('${data.error}'));
+                      }
+                      else if(data.hasData){
+                        var deals = data.data as List<Deal>;
+                        return  Row(
+                          children: [
+                          Column(
                             children: [
                             for(int j=0;j<24;j++)
                               Container(
-                                color: Colors.white,
+                                color: Color(0xff3AF0E5),
                                 height: hour_heigh*1,
-                                width: 200,
-                                child: Text("ytuyvv"),
+                                width: 40,
+                                margin: EdgeInsets.only(right: 2),
+                                child: Text(intToTime(j)),
                               )
-                          ],
-                        ))
-                  ],
-                )
+                            ]
+                          ),
+                          for(Deal d in deals)
+                          Expanded(
+                            child: Column(
+                            children: [
+                            Container(
+                            color: Colors.white,
+                            height: hour_heigh/60*d.time_start,
+                            width: 200,
 
-
-                /*ListView.builder(
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context,index){
-                  return
-                    Card(
-                    margin: const EdgeInsets.all(0.0),
-
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-
-                        children: <Widget>[
-                          Text("ytuyvv"),
-                          Text("jjggjgjhk"),
-                          Container(
-                            child: ListView.builder(itemBuilder: (context,index){
-                              return Card(
-                                child:  Text("ytuyvv"),
-                              );
-                            },
-                              itemCount: 1,
                             ),
-                          )
+                            Container(
+                            color: Color(0xffd1fff6),
+                            height: hour_heigh/60*(d.time_finish-d.time_start),
+                            width: 200,
+                            child: Text(d.name),
+                            ),
+                            Container(
+                            color: Colors.white,
+                            height: hour_heigh/60*(24*60-d.time_finish),
+                            width: 200,
+                            )
+                            /*for(int j=0;j<24;j++)
+                                    Container(
+                                      color: Colors.white,
+                                      height: hour_heigh*1,
+                                      width: 200,
+                                      child: Text("ytuyvv"),
+                                    )*/
+                            ],
+                            ))
+                          ],
+                          );
+                      }
+                      return Center(child: CircularProgressIndicator());
+                    }
+                ),
 
-                        ],
-                      ),
-                    ),
-                  );
-                },
-                  itemCount: 5,
-
-
-                ),*/
               ),
-              /*Text(
-                'You have pushed the button this many times:',
-              ),
-              Text(
-                '$_counter',
-                style: Theme.of(context).textTheme.headline4,
-              ),*/
             ],
           ),
 
@@ -254,6 +261,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
+        backgroundColor: Color(0xff3AF0E5),
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
@@ -262,10 +270,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String intToTime(int j) {
 
+
     if(j<10)
       return "0"+j.toString()+":00";
     else
       return j.toString()+":00";
+
 
 
   }
