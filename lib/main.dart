@@ -50,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   int _counter = 0;
   int column_counter =4;
+  int hour_heigh = 60;
 
   late CalendarController _calendar;
   TextStyle dayStyle(FontWeight fontWeight){
@@ -121,8 +122,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 initialCalendarFormat: CalendarFormat.twoWeeks,
 
                 availableCalendarFormats: const {
-                  CalendarFormat.month: 'month',
-                  CalendarFormat.twoWeeks: '2 weeks',
+                  CalendarFormat.month: 'месяц',
+                  CalendarFormat.twoWeeks: '2 недели',
                 },
                   startingDayOfWeek: StartingDayOfWeek.monday,
                   calendarStyle:CalendarStyle(
@@ -158,9 +159,9 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(height: 20,),
               Container(
 
-                padding: EdgeInsets.only(left: 30,top: 30,right: 10),
+                padding: EdgeInsets.only(left: 20,top: 30,right: 20),
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height*0.55,
+                height: hour_heigh*24+40,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(50),topRight: Radius.circular(50)),
                   color: Color(0xffDCDCDC),
@@ -170,7 +171,40 @@ class _MyHomePageState extends State<MyHomePage> {
                     blurRadius: 10.0,
                   )]
                 ),
-                child: ListView.builder(
+                child: Row(
+                  children: [
+                    Column(
+                        children: [
+                          for(int j=0;j<24;j++)
+                            Container(
+                              color: Color(0xff3AF0E5),
+                              height: hour_heigh*1,
+                              width: 40,
+                              margin: EdgeInsets.only(right: 2),
+                              child: Text(intToTime(j)),
+                            )
+                        ]
+                    ),
+                    for(int i=0; i<4;i++)
+                      Expanded(
+                          child: Column(
+                            children: [
+                            for(int j=0;j<24;j++)
+                              Container(
+                                color: Colors.white,
+                                height: hour_heigh*1,
+                                width: 200,
+                                child: Text("ytuyvv"),
+                              )
+                          ],
+                        ))
+                  ],
+                )
+
+
+                /*ListView.builder(
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
 
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context,index){
@@ -184,15 +218,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
                         children: <Widget>[
                           Text("ytuyvv"),
-                          Text("jjggjgjhk")
+                          Text("jjggjgjhk"),
+                          Container(
+                            child: ListView.builder(itemBuilder: (context,index){
+                              return Card(
+                                child:  Text("ytuyvv"),
+                              );
+                            },
+                              itemCount: 1,
+                            ),
+                          )
+
                         ],
                       ),
                     ),
                   );
                 },
-                  itemCount: column_counter,
+                  itemCount: 5,
 
-                ),
+
+                ),*/
               ),
               /*Text(
                 'You have pushed the button this many times:',
@@ -215,7 +260,20 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  String intToTime(int j) {
+
+    if(j<10)
+      return "0"+j.toString()+":00";
+    else
+      return j.toString()+":00";
+
+
+  }
+
 
 }
+
+
+
 
 
