@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/services.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import 'addDeal.dart';
 import 'model/deal.dart';
 import 'model/deal.dart';
 import 'model/deal.dart';
@@ -290,10 +291,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        /*onPressed: _incrementCounter,*/
         backgroundColor: Color(0xff3AF0E5),
         tooltip: 'Increment',
         child: Icon(Icons.add),
+        onPressed: () {
+          //Нажатие на плавающую кнопку (справа сверху)
+          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>addDeal()));
+        },
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
