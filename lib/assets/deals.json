@@ -4,6 +4,7 @@
     "color": "00B8D0",
     "time_start": 8,
     "time_finish": 110,
+    "date": 1632032038550,
     "name": "name11",
     "description": "desc1"
   },
@@ -12,6 +13,7 @@
     "color": "58b474",
     "time_start": 110,
     "time_finish": 212,
+    "date": 1632032038550,
     "name": "name122",
     "description": "desc1"
   },
@@ -20,6 +22,7 @@
     "color": "d5d069",
     "time_start": 339,
     "time_finish": 819,
+    "date": 1632032038550,
     "name": "name1333",
     "description": "desc1"
   }

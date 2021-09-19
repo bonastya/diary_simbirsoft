@@ -55,32 +55,57 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-Future<List<Deal>> getDeals() async {
-  final responce =
-  await rootBundle.loadString("lib/assets/deals.json");
-  final data = await json.decode(responce) as List<dynamic>;
 
-  return data
-      .map((e) => Deal.fromJson(e))
-      .toList();
-
-}
 
 class _MyHomePageState extends State<MyHomePage> {
 
   int _counter = 0;
   int column_counter =4;
   int hour_heigh = 60;
+  var selectedDate=DateTime.now();
   //var deals = [Deal( time_start: 60, color: "Colors.amber", id: 1, name: 'name1', description: 'description', time_finish: 120 ),Deal( time_start: 120, color: "Colors.amber", id: 1, name: 'name2', description: 'description', time_finish: 180 ),Deal( time_start: 380, color: "Colors.amber", id: 1, name: 'name', description: 'description', time_finish: 570 ),Deal( time_start: 1000, color: "Colors.amber", id: 1, name: 'name', description: 'description', time_finish: 1200 )];
   //var deals = getDeals();
 
   late CalendarController _calendar;
+
+
   TextStyle dayStyle(FontWeight fontWeight){
     return TextStyle(color: Color(0xff30384c), fontWeight: fontWeight);
   }
   TextStyle weekendStyle(FontWeight fontWeight){
     return TextStyle(color: Color(0xff4EE0D8), fontWeight: fontWeight);
   }
+
+  Future<List<Deal>> getDeals() async {
+    final responce =
+    await rootBundle.loadString("lib/assets/deals.json");
+    final data = await json.decode(responce) as List<dynamic>;
+
+    return data
+        .map((e) => Deal.fromJson(e))
+        .toList()
+        .where((e) => (dealInSelectedDay(e)))
+        .toList();
+
+  }
+
+  bool dealInSelectedDay(Deal d) {
+    DateTime deal = DateTime.fromMillisecondsSinceEpoch(d.date);
+
+    /*print("TTTTTTT"+selectedDate.day.toString());
+    print("TTTTTTT33 "+selectedDate.millisecondsSinceEpoch.toString());
+    print("TTTTTTT33 "+DateTime.fromMillisecondsSinceEpoch(selectedDate.millisecondsSinceEpoch).day.toString());
+    print("TTTTTTT"+deal.toString());*/
+
+    if (deal.year == selectedDate.year &&
+        deal.month == selectedDate.month &&
+        deal.day == selectedDate.day
+    ) return true;
+    return false;
+  }
+
+
+
   @override
   void initState(){
     super.initState();
@@ -148,6 +173,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   CalendarFormat.twoWeeks: '2 недели',
                 },
                   startingDayOfWeek: StartingDayOfWeek.monday,
+                  onDaySelected: (DateTime date,events, _) {
+                    this.setState(() => selectedDate = date);
+                  },
+
+
                   calendarStyle:CalendarStyle(
                     weekdayStyle: dayStyle(FontWeight.normal),
                     weekendStyle: weekendStyle(FontWeight.normal),

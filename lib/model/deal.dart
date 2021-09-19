@@ -3,6 +3,7 @@ class Deal{
   String color;
   int time_start;
   int time_finish;
+  int date;
   String name;
   String description;
 
@@ -11,6 +12,7 @@ class Deal{
     required this.color,
     required this.time_start,
     required this.time_finish,
+    required this.date,
     required this.name,
     required this.description
   });
@@ -21,6 +23,7 @@ class Deal{
     'color': color,
     'time_start': time_start,
     'time_finish': time_finish,
+    'date': date,
     'name': name,
     'description': description
   };
@@ -31,6 +34,7 @@ class Deal{
         color: json['color'],
         time_start: json['time_start'],
         time_finish: json['time_finish'],
+        date: json['date'],
         name: json['name'],
         description: json['description']
     );
