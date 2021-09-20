@@ -25,9 +25,9 @@ class _addDealState extends State<addDeal> {
   String dealDescription = "22";
 
 
-  late File jsonFile;
-  late Directory dir;
-  String fileName = "myJsonForDeals2.json";
+  File? jsonFile=null;
+  Directory? dir=null;
+  String fileName = "myJsonForDeals3.json";
   bool fileExist = false;
   //Map<Deal>? fileContent=null;
   List<dynamic>? fileContent=[];
@@ -40,11 +40,13 @@ class _addDealState extends State<addDeal> {
     super.initState();
     getApplicationDocumentsDirectory().then((Directory directory){
       dir = directory;
-      jsonFile = new File(dir.path+"/"+fileName);
-      fileExist = jsonFile.existsSync();
-      if(fileExist) this.setState(() => fileContent = json.decode(jsonFile.readAsStringSync()));
+      jsonFile = new File(dir!.path+"/"+fileName);
+      fileExist = jsonFile!.existsSync();
+      if(fileExist) this.setState(() => fileContent = json.decode(jsonFile!.readAsStringSync()));
     });
   }
+
+
 
 
 
@@ -65,17 +67,12 @@ class _addDealState extends State<addDeal> {
     Map<String, dynamic> content1 =deal.toJson();
 
     newContent.add(content1);
-
-
-
-    //List<Deal> content = List.of(deal);
-    //var dealsList=null;
     if(fileExist){
       print("file is");
 
-      List<dynamic> jsonFileContent = json.decode(jsonFile.readAsStringSync());
+      List<dynamic> jsonFileContent = json.decode(jsonFile!.readAsStringSync());
       jsonFileContent.addAll([content]);
-      jsonFile.writeAsStringSync(json.encode(jsonFileContent));
+      jsonFile!.writeAsStringSync(json.encode(jsonFileContent));
 
 
 /*
@@ -98,10 +95,10 @@ class _addDealState extends State<addDeal> {
       jsonFile.writeAsStringSync(json.encode(jsonFile));*/
     } else{
       print("no file");
-      createFile(newContent, dir, fileName);
+      createFile(newContent, dir!, fileName);
     }
     print("DDDDD "+newContent.toString());
-    this.setState(() => fileContent =  json.decode(jsonFile.readAsStringSync()));/*json.decode(jsonFile.readAsStringSync()));*/
+    this.setState(() => fileContent =  json.decode(jsonFile!.readAsStringSync()));/*json.decode(jsonFile.readAsStringSync()));*/
   }
 
 
@@ -437,12 +434,12 @@ class _addDealState extends State<addDeal> {
                       child: Text('Добавить'),
 
                       onPressed: () {
-                        print("TTTTTT "+dealName+" "+dealDescription+" "+dealDate.toString()+" "+_timeRange!.start.toString()+" "+_timeRange!.end.toString());
+                        //print("TTTTTT "+dealName+" "+dealDescription+" "+dealDate.toString()+" "+_timeRange!.start.toStrin+" "+_timeRange!.end.toString());
 
 
-                        writeToFile( Deal(id: 1, color: '123', time_start: _timeRange!.start.inMinutes(), date: dealDate.millisecondsSinceEpoch, time_finish: _timeRange!.end.inMinutes(), name: dealName, description: dealDescription ));
+                        writeToFile( Deal(id: 1, color: "fff", time_start: _timeRange!.start.inMinutes(), date: dealDate.millisecondsSinceEpoch, time_finish: _timeRange!.end.inMinutes(), name: dealName, description: dealDescription ));
                         // Navigate to second route when tapped.
-                        //Navigator.pop(context);
+                        Navigator.pop(context);
                       },
                     ),
                   ),
