@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:time_range/time_range.dart';
 import 'package:path_provider/path_provider.dart';
@@ -32,9 +31,6 @@ class _addDealState extends State<addDeal> {
   //Map<Deal>? fileContent=null;
   List<dynamic>? fileContent=[];
 
-
-
-
   @override
   void initState(){
     super.initState();
@@ -45,9 +41,6 @@ class _addDealState extends State<addDeal> {
       if(fileExist) this.setState(() => fileContent = json.decode(jsonFile!.readAsStringSync()));
     });
   }
-
-
-
 
 
   void createFile(List<dynamic> content, Directory dir, String fileName) {
@@ -74,44 +67,13 @@ class _addDealState extends State<addDeal> {
       jsonFileContent.addAll([content]);
       jsonFile!.writeAsStringSync(json.encode(jsonFileContent));
 
-
-/*
-      var jsonFileContent = jsonFile.readAsStringSync();
-      List jsonList = json.decode(jsonFileContent);
-      dealsList =  new List<Deal>.from(
-          jsonList.map((json) => new Deal.fromJson(json)).toList()
-      );//получение списка
-
-      dealsList.add(deal);
-      List<Deal> data =dealsList;
-      List jsonList1 = [];
-      data.forEach((item) => jsonList1.add(json.encode(item.toJson())));
-
-      jsonFile.writeAsStringSync(jsonList1.toString());
-*/
-
-      /*jsonFileContent.addAll(content);
-      jsonFileContent.forEach((key, value) { })
-      jsonFile.writeAsStringSync(json.encode(jsonFile));*/
     } else{
       print("no file");
       createFile(newContent, dir!, fileName);
     }
     print("DDDDD "+newContent.toString());
-    this.setState(() => fileContent =  json.decode(jsonFile!.readAsStringSync()));/*json.decode(jsonFile.readAsStringSync()));*/
+    this.setState(() => fileContent =  json.decode(jsonFile!.readAsStringSync()));
   }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   final _defaultTimeRange = TimeRangeResult(
@@ -151,7 +113,7 @@ class _addDealState extends State<addDeal> {
             child: Column(
 
               children: [
-                Text(fileContent.toString()),
+                /*Text(fileContent.toString()),*/
                 SizedBox(height: 7,),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -185,7 +147,6 @@ class _addDealState extends State<addDeal> {
                       focusColor: Color(0xff3AF0E5),
                       hoverColor: Color(0xff3AF0E5),
                       suffixIcon: Icon(Icons.event_note),
-                      //helperText: "Логин используется для входа в систему"
                     ),
                     onSubmitted: (text) {
                       dealName = text;
@@ -208,8 +169,6 @@ class _addDealState extends State<addDeal> {
                               fontWeight: FontWeight.normal,
                               fontSize: 24,
                               color: Colors.black54,
-
-
 
                             ),
                             text: "Когда?"
@@ -237,27 +196,7 @@ class _addDealState extends State<addDeal> {
                     children: [
 
                       SizedBox(height: 10,),
-                      /*InputDatePickerFormField(firstDate: DateTime.now(), lastDate: DateTime.now(),),*/
-                      /*DatePickerDialog(initialDate: DateTime.now(), firstDate:  DateTime.now(), lastDate: DateTime.now()),
-              */
-                      /*Align(
-                alignment: Alignment.centerLeft,
-                child: (
-                    RichText(
-                      text: TextSpan(
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 24,
-                            color: Colors.black54,
 
-
-
-                          ),
-                          text: "Время"
-                      ),
-                    )
-                ),
-              ),*/
                       TimeRange(
                         fromTitle: Text(
                           'FROM',
@@ -306,62 +245,11 @@ class _addDealState extends State<addDeal> {
                                         'Selected Range: ${_timeRange!.start.format(context)} - ${_timeRange!.end.format(context)}',
                                         style: TextStyle(fontSize: 15, color: Colors.black54),
                                       ),
-                                      /*SizedBox(height: 20),
-                                      MaterialButton(
-                                        child: Text('Default'),
-                                        onPressed: () =>
-                                            setState(() => _timeRange = _defaultTimeRange),
-                                        color: Color(0xff3AF0E5),
-                                      )*/
+
                                 ],
                             ),
                       ),
 
-
-                     /* Row(
-                        children: [
-                          Expanded(
-                              child:
-                              Column(
-                                children: [
-                                  Text("Начало"),
-                                  Container(
-                                    height: 100,
-                                    child: CupertinoDatePicker(
-                                      backgroundColor: Colors.white,
-
-                                      mode: CupertinoDatePickerMode.time,
-                                      initialDateTime: DateTime(1969, 1, 1),
-                                      onDateTimeChanged: (DateTime newDateTime) {
-                                        // Do something
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              )
-                          ),
-                          SizedBox(width: 17,),
-                          Expanded(
-                              child:
-                              Column(
-                                children: [
-                                  Text("Конец"),
-                                  Container(
-                                    height: 100,
-                                    child: CupertinoDatePicker(
-                                      backgroundColor: Colors.white,
-                                      mode: CupertinoDatePickerMode.time,
-                                      initialDateTime: DateTime.now(),
-                                      onDateTimeChanged: (DateTime newDateTime) {
-                                        // Do something
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              )
-                          ),
-                        ],
-                      ),*/
                     ],
                   ),
                 ),
@@ -399,13 +287,6 @@ class _addDealState extends State<addDeal> {
                           hintText: "пояснение, описание",
                           border: OutlineInputBorder(),
 
-                          /*prefixIconConstraints: BoxConstraints(
-                      maxHeight: 32,
-                      minWidth: 32,
-
-                    ),*/
-
-                          //helperText: "Логин используется для входа в систему"
                         ),
                         onSubmitted: (text) {
                           dealDescription = text;
@@ -434,11 +315,7 @@ class _addDealState extends State<addDeal> {
                       child: Text('Добавить'),
 
                       onPressed: () {
-                        //print("TTTTTT "+dealName+" "+dealDescription+" "+dealDate.toString()+" "+_timeRange!.start.toStrin+" "+_timeRange!.end.toString());
-
-
                         writeToFile( Deal(id: 1, color: "fff", time_start: _timeRange!.start.inMinutes(), date: dealDate.millisecondsSinceEpoch, time_finish: _timeRange!.end.inMinutes(), name: dealName, description: dealDescription ));
-                        // Navigate to second route when tapped.
                         Navigator.pop(context);
                       },
                     ),
