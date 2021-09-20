@@ -1,7 +1,13 @@
+import 'dart:io';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:time_range/time_range.dart';
+import 'package:path_provider/path_provider.dart';
+
+import 'model/deal.dart';
 
 class addDeal extends StatefulWidget {
   addDeal({Key? key, required this.title}) : super(key: key);
@@ -15,12 +21,101 @@ class addDeal extends StatefulWidget {
 class _addDealState extends State<addDeal> {
 
   DateTime dealDate = DateTime.now();
-  /*TimeRange timeRange = TimeRange(
-      firstTime: TimeOfDay(hour: 8, minute: 0),
-      lastTime: TimeOfDay(hour: 21, minute: 0), timeBlock: 5, onRangeCompleted: (TimeRangeResult? range) {  },);
-  */
   String dealName = "11";
   String dealDescription = "22";
+
+
+  late File jsonFile;
+  late Directory dir;
+  String fileName = "myJsonForDeals2.json";
+  bool fileExist = false;
+  //Map<Deal>? fileContent=null;
+  List<dynamic>? fileContent=[];
+
+
+
+
+  @override
+  void initState(){
+    super.initState();
+    getApplicationDocumentsDirectory().then((Directory directory){
+      dir = directory;
+      jsonFile = new File(dir.path+"/"+fileName);
+      fileExist = jsonFile.existsSync();
+      if(fileExist) this.setState(() => fileContent = json.decode(jsonFile.readAsStringSync()));
+    });
+  }
+
+
+
+  void createFile(List<dynamic> content, Directory dir, String fileName) {
+    print("Creating file!");
+    File file = new File(dir.path + "/" + fileName);
+    file.createSync();
+    fileExist = true;
+    file.writeAsStringSync(json.encode(content));
+  }
+
+
+  void writeToFile(Deal deal){
+    print("write to filr");
+    Deal content =deal;
+    List<dynamic> newContent = fileContent!;
+
+    Map<String, dynamic> content1 =deal.toJson();
+
+    newContent.add(content1);
+
+
+
+    //List<Deal> content = List.of(deal);
+    //var dealsList=null;
+    if(fileExist){
+      print("file is");
+
+      List<dynamic> jsonFileContent = json.decode(jsonFile.readAsStringSync());
+      jsonFileContent.addAll([content]);
+      jsonFile.writeAsStringSync(json.encode(jsonFileContent));
+
+
+/*
+      var jsonFileContent = jsonFile.readAsStringSync();
+      List jsonList = json.decode(jsonFileContent);
+      dealsList =  new List<Deal>.from(
+          jsonList.map((json) => new Deal.fromJson(json)).toList()
+      );//получение списка
+
+      dealsList.add(deal);
+      List<Deal> data =dealsList;
+      List jsonList1 = [];
+      data.forEach((item) => jsonList1.add(json.encode(item.toJson())));
+
+      jsonFile.writeAsStringSync(jsonList1.toString());
+*/
+
+      /*jsonFileContent.addAll(content);
+      jsonFileContent.forEach((key, value) { })
+      jsonFile.writeAsStringSync(json.encode(jsonFile));*/
+    } else{
+      print("no file");
+      createFile(newContent, dir, fileName);
+    }
+    print("DDDDD "+newContent.toString());
+    this.setState(() => fileContent =  json.decode(jsonFile.readAsStringSync()));/*json.decode(jsonFile.readAsStringSync()));*/
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   final _defaultTimeRange = TimeRangeResult(
     TimeOfDay(hour: 14, minute: 50),
@@ -59,6 +154,7 @@ class _addDealState extends State<addDeal> {
             child: Column(
 
               children: [
+                Text(fileContent.toString()),
                 SizedBox(height: 7,),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -343,8 +439,10 @@ class _addDealState extends State<addDeal> {
                       onPressed: () {
                         print("TTTTTT "+dealName+" "+dealDescription+" "+dealDate.toString()+" "+_timeRange!.start.toString()+" "+_timeRange!.end.toString());
 
+
+                        writeToFile( Deal(id: 1, color: '123', time_start: _timeRange!.start.inMinutes(), date: dealDate.millisecondsSinceEpoch, time_finish: _timeRange!.end.inMinutes(), name: dealName, description: dealDescription ));
                         // Navigate to second route when tapped.
-                        Navigator.pop(context);
+                        //Navigator.pop(context);
                       },
                     ),
                   ),

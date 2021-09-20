@@ -78,9 +78,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<List<Deal>> getDeals() async {
-    final responce =
-    await rootBundle.loadString("lib/assets/deals.json");
+    final responce =await rootBundle.loadString("lib/assets/deals.json");
     final data = await json.decode(responce) as List<dynamic>;
+/*
+    var dealsList =  new List<Deal>.from(
+        jsonList.map((json) => new Deal.fromJson(json)).toList()
+    );*/
+
 
     return data
         .map((e) => Deal.fromJson(e))

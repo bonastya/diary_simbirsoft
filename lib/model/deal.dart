@@ -21,9 +21,9 @@ class Deal{
   Map<String, dynamic> toJson() => {
     'id': id,
     'color': color,
-    'time_start': time_start,
-    'time_finish': time_finish,
-    'date': date,
+    'time_start': time_start.toString(),
+    'time_finish': time_finish.toString(),
+    'date': date.toString(),
     'name': name,
     'description': description
   };
