@@ -97,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print("TTTTTTT33 "+selectedDate.millisecondsSinceEpoch.toString());
     print("TTTTTTT33 "+DateTime.fromMillisecondsSinceEpoch(selectedDate.millisecondsSinceEpoch).day.toString());
     print("TTTTTTT"+deal.toString());*/
-
+    //print("TTTTTTT33 "+selectedDate.millisecondsSinceEpoch.toString());
     if (deal.year == selectedDate.year &&
         deal.month == selectedDate.month &&
         deal.day == selectedDate.day
@@ -297,7 +297,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Icon(Icons.add),
         onPressed: () {
           //Нажатие на плавающую кнопку (справа сверху)
-          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>addDeal()));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>addDeal(title: '555',)));
         },
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
