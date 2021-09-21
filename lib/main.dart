@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -252,10 +253,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
                                         ),
                                         Container(
+                                          alignment: Alignment.topCenter,
                                           color: Color(0xffd1fff6),
                                           height: hour_heigh/60*(d.time_finish-d.time_start),
                                           width: 2000,
-                                          child: Text(d.name),
+                                          child: Text(d.name+"\n"+"("+d.description+")",
+                                          textAlign: TextAlign.center,),
+
+
                                         ),
                                         Container(
                                           color: Colors.white,
